@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy Birthday — Hero</title>
+  <style>
+    /* Reset + base */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body,#root{height:100%}
+    body{
+      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(150deg,#fff0f5 0%, #fffaf0 50%, #fff9f2 100%);
+      color:#111827;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* HERO */
+    .hero{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:48px 20px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* soft bokeh blobs */
+    .blob{
+      position:absolute;
+      width:420px;
+      height:420px;
+      filter:blur(60px);
+      opacity:.12;
+      border-radius:50%;
+      transform:translate(-50%,-50%);
+      pointer-events:none;
+    }
+    .blob.one{background: #ffb6c1; left:10%; top:10%;}
+    .blob.two{background:#f7e7b4; right:8%; bottom:6%;}
+
+    /* container card */
+    .card{
+      width:100%;
+      max-width:980px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7));
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:24px;
+      align-items:center;
+      box-shadow: 0 10px 30px rgba(17,24,39,0.08);
+      backdrop-filter: blur(6px);
+    }
+
+    /* text column */
+    .hero-text{
+      padding: 18px 10px;
+    }
+    .eyebrow{
+      font-size:14px;
+      color:#b4536c;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      margin-bottom:8px;
+      font-weight:600;
+    }
+    h1{
+      font-family: "Playfair Display", serif;
+      font-size: clamp(32px, 6vw, 56px);
+      line-height:1.02;
+      margin-bottom:12px;
+      color:#0f172a;
+      letter-spacing:-0.02em;
+    }
+    p.lead{
+      font-size:16px;
+      color:#374151;
+      margin-bottom:18px;
+    }
+
+    .cta-row{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+
+    .btn{
+      appearance:none;
+      border:0;
+      background:linear-gradient(90deg,#f97316,#fb7185);
+      color:white;
+      padding:12px 18px;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:0 6px 16px rgba(251,113,133,0.18);
+      transition:transform .12s ease, box-shadow .12s;
+    }
+    .btn:active{ transform:translateY(1px) scale(.998) }
+    .btn.secondary{
+      background:transparent;
+      color:#0f172a;
+      border:1px solid rgba(15,23,42,0.06);
+      font-weight:600;
+    }
+
+    /* photo column */
+    .photo-wrap{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      padding:12px;
+      position:relative;
+    }
+    .photo-card{
+      width:280px;
+      height:280px;
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow: 0 12px 30px rgba(2,6,23,0.08);
+      border:6px solid rgba(255,255,255,0.6);
+      background:linear-gradient(180deg,#fff,#fff7f7);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .photo-card img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .photo-badge{
+      position:absolute;
+      right:18px;
+      bottom:24px;
+      background:rgba(255,255,255,0.9);
+      padding:10px 14px;
+      border-radius:999px;
+      box-shadow:0 8px 20px rgba(2,6,23,0.06);
+      font-weight:700;
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+
+    /* small responsive tweaks */
+    @media (max-width:880px){
+      .card{ grid-template-columns: 1fr; padding:18px; gap:16px; }
+      .photo-card{ width:220px; height:220px; margin:0 auto; }
+      .photo-badge{ right:50%; transform:translateX(50%); }
+    }
+
+    /* confetti canvas overlay */
+    #confetti-canvas{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:30;
+    }
+
+    /* small entrance animation */
+    .fade-up{ transform:translateY(14px); opacity:0; animation:fadeUp .7s cubic-bezier(.2,.9,.3,1) forwards; }
+    @keyframes fadeUp{ to{ transform:none; opacity:1 } }
+
+    /* subtle glowing text */
+    .glow {
+      text-shadow: 0 6px 18px rgba(249,115,22,0.12);
+    }
+  </style>
+</head>
+<body>
+  <main id="root">
+    <section class="hero" id="section1" aria-label="Hero — Happy Birthday">
+      <div class="blob one" aria-hidden="true"></div>
+      <div class="blob two" aria-hidden="true"></div>
+
+      <!-- confetti canvas -->
+      <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+      <div class="card fade-up" role="region" aria-label="Birthday hero card">
+        <div class="hero-text">
+          <div class="eyebrow">Special day</div>
+          <h1 class="glow" id="hero-title">Selamat Ulang Tahun Sayang</h1>
+          <p class="lead">Pertama yang aku ingin sampaikan , Terimakasih masih disini, Aku rasa kita sudah dewasa jadi ini mungkin lebih ke pesan bukan ucapan</p>
+
+          <div class="cta-row">
+            <button class="btn" id="tap-btn" aria-controls="section2" aria-label="Tap to read my message">Tap to Read My Message</button>
+            <button class="btn secondary" id="surprise-btn" aria-label="Quick surprise">Peek Surprise ✨</button>
+          </div>
+        </div>
+
+        <div class="photo-wrap" aria-hidden="false">
+          <div class="photo-card" title="Foto Berlia (ganti src)">
+            <!-- Ganti src dengan foto Berlia -->
+            <img id="hero-photo" src="berlia1.jpg" alt="Foto Berlia — ganti dengan foto yang kamu punya">
+          </div>
+
+          <div class="photo-badge">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 21s-6-4.35-9-7.5C0.3 10.57 2 5 7 4.5 9 4.2 11 5.5 12 7c1-1.5 3-2.8 5-2.5 5 .5 6.7 6.07 4 9 0 0-3 3.5-9 3z" fill="#fb7185" />
+            </svg>
+            <span>Berlia Putri D.A</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Placeholder Section 2 (message) -->
+    <section id="section2" style="min-height:60vh;padding:64px 20px;display:flex;align-items:center;justify-content:center;">
+      <div style="max-width:760px;background:white;padding:28px;border-radius:16px;box-shadow:0 8px 30px rgba(2,6,23,.06)">
+        <h2 style="font-family:'Playfair Display', serif;margin-bottom:12px">My Message</h2>
+        <p style="color:#374151;line-height:1.6">[Section 2 here — pesanmu akan muncul di sini. Kamu bisa ganti isi dengan kata-kata yang kamu tulis untuk Berlia.]</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Smooth scroll to section2
+    document.getElementById('tap-btn').addEventListener('click', () => {
+      document.getElementById('section2').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Surprise quick peek (simple toggle show)
+    document.getElementById('surprise-btn').addEventListener('click', () => {
+      alert("Surprise: Aku sayang kamu lebih dari kopi pagiku ☕️❤️");
+    });
+
+    /* --- Lightweight confetti routine --- */
+    (function(){
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      let W = canvas.width = innerWidth;
+      let H = canvas.height = innerHeight;
+      let pieces = [];
+      const colors = ['#FB7185','#F97316','#FDE68A','#A78BFA','#60A5FA','#86EFAC'];
+
+      function rand(min, max) { return Math.random() * (max - min) + min; }
+
+      function makePiece() {
+        return {
+          x: rand(0, W),
+          y: rand(-H*0.2, -10),
+          w: rand(6, 12),
+          h: rand(8, 18),
+          vx: rand(-0.6, 0.6),
+          vy: rand(1.2, 3),
+          rot: rand(0, Math.PI*2),
+          vrot: rand(-0.08, 0.08),
+          color: colors[Math.floor(rand(0, colors.length))]
+        };
+      }
+
+      function init() {
+        pieces = [];
+        for (let i=0;i<80;i++) pieces.push(makePiece());
+      }
+
+      function resize(){
+        W = canvas.width = innerWidth;
+        H = canvas.height = innerHeight;
+      }
+      addEventListener('resize', resize);
+
+      function update(){
+        ctx.clearRect(0,0,W,H);
+        for (let i=0;i<pieces.length;i++){
+          const p = pieces[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vrot;
+          // draw
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+          ctx.restore();
+
+          // reset if out
+          if (p.y > H + 40) {
+            pieces[i] = makePiece();
+            pieces[i].y = rand(-80, -10);
+          }
+        }
+        requestAnimationFrame(update);
+      }
+
+      // gentle start: delay so user sees hero first
+      window.addEventListener('load', () => {
+        init();
+        setTimeout(() => {
+          requestAnimationFrame(update);
+        }, 600); // slight delay
+      });
+
+      // reduce confetti if on small devices to save CPU
+      if (innerWidth < 600) {
+        pieces = [];
+        for (let i=0;i<36;i++) pieces.push(makePiece());
+      }
+    })();
+  </script>
+  <!-- ========================= -->
+<!--       SECTION 2           -->
+<!-- ========================= -->
+<section id="section2" class="message-section">
+  <div class="message-card">
+    <div class="msg-header">
+      <span class="heartbeat">❤️</span>
+      <h2>My Birthday Message for You</h2>
+    </div>
+
+    <p id="typed-message" class="typed"></p>
+
+    <a href="page2.html" id="next-surprise" class="btn-next">Next Surprise ✨</a>
+  </div>
+</section>
+
+<style>
+  .message-section{
+    min-height:100vh;
+    padding:70px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(180deg,#fffafc 0%,#fff8f0 100%);
+  }
+
+  .message-card{
+    width:100%;
+    max-width:760px;
+    background:white;
+    padding:36px 26px;
+    border-radius:22px;
+    box-shadow:0 12px 40px rgba(2,6,23,0.08);
+    animation:fadeIn .8s ease forwards;
+  }
+
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(14px)}
+    to{opacity:1;transform:none}
+  }
+
+  .msg-header{
+    text-align:center;
+    margin-bottom:18px;
+  }
+
+  .msg-header h2{
+    font-family:"Playfair Display", serif;
+    font-size:clamp(26px,4.5vw,36px);
+    margin-top:6px;
+  }
+
+  .heartbeat{
+    font-size:30px;
+    animation:beat 1.4s infinite;
+    display:inline-block;
+  }
+
+  @keyframes beat{
+    0%,100%{ transform:scale(1) }
+    50%{ transform:scale(1.3) }
+  }
+
+  #typed-message{
+    font-size:17px;
+    line-height:1.65;
+    color:#374151;
+    min-height:120px;
+    margin-bottom:26px;
+    white-space:pre-wrap;
+  }
+
+  .btn-next{
+    appearance:none;
+    border:0;
+    background:linear-gradient(90deg,#fb7185,#f97316);
+    color:white;
+    padding:12px 22px;
+    border-radius:14px;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    box-shadow:0 8px 22px rgba(249,115,22,0.18);
+    transition:.15s;
+  }
+  .btn-next:active{
+    transform:translateY(1px) scale(.98);
+  }
+</style>
+
+<script>
+  /* ===============================
+        TYPEWRITER MESSAGE
+     =============================== */
+  const messageText = `
+Santai santai jangan skeptis dulu dengan website
+ala ala yang alay ini wkwkwk
+
+tenang aku gak pingin alay alay kok ini cuma kayak cerita aja
+bagaimana yaa mungkin hal hal yang tak fikirkan tentangmu
+
+aku tau kamu wes dewasa dan gakmungkin kemakan tampilan lope lope alay
+ngene wkwkwkwk , tenang ae baca aja ini bukan ucapan tapi lenbih ke ungkapan
+
+nah klik iki buat tau kelanjutan e lah, tapi sebelum itu 
+Happy Birthday yaa sayang
+  `;
+
+  let idx = 0;
+  const speed = 28;
+  const typedEl = document.getElementById("typed-message");
+
+  // Play typewriter only when visible
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        typeWriter();
+        observer.disconnect();
+      }
+    });
+  }, {threshold:0.3});
+
+  observer.observe(document.getElementById('section2'));
+
+  function typeWriter(){
+    if(idx < messageText.length){
+      typedEl.textContent += messageText.charAt(idx);
+      idx++;
+      setTimeout(typeWriter, speed);
+    }
+  }
+
+  // Button Next Surprise
+  document.getElementById("next-surprise").addEventListener("click", ()=>{
+    alert("Surprise berikutnya siap… bilang aja mau aku buatin Section 3 😎✨");
+  });
+</script>
+
+</body>
+</html>

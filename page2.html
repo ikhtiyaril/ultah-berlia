@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .gallery-section {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+.card img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+}
+
+.card-info {
+  padding: 15px;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.card-caption {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+.next-button {
+  margin-top: 12px;
+  padding: 10px 16px;
+  background: #ff4f70;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  width: 100%;
+}
+
+</style>
+<body>
+
+    <section class="gallery-section">
+  <h2>Curhat Aja Nih</h2>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</section>
+
+<script>
+  const momentCards = [
+    {
+      photos: [
+        "berlia2.jpg",
+        "berlia3.jpg",
+        "berlia4.jpg",
+        "berlia5.jpg",
+        "berlia6.jpg",
+        "berlia7.jpg",
+        "berlia8.jpg", // <-- foto ke 7
+      ],
+
+      titles: [
+        "Pertama",
+        "Cantik Bgt Ternyata",
+        "First Date Cuy",
+        "Gak Expect",
+        "pirst kist awokawok",
+        "kedewasaan",
+        "Hadiah Pre Order Neh", // Judul untuk foto ke 7
+      ],
+
+      captions: [
+        "Ini awale lucu seh jujur ae sebenere aku pas itu ndek pondok kan ya, gak terlalu tertarik ambek perempuan kan , soale yaa gitu bel arek walisongo itu aneh gitu kadang menurutku, tapi pas ngomong ambek drimu iku kayak aku liat something diffirent yang kayak wah anak ini normal wkwkwk, Cantik lagi ya kan, mulai dari itu wes aku merancang rancang strategi biar kita bisa banyak kegiatan bareng wkwk gatau seh kamu jadine itu tertarik nang aku , tertarik haruse kan sekarang wes jadian ",
+        "ndek sini loh kamu iku keliatan bener bener anjayy cantik bgt, pas itu dapat kamu tuh wes kayak penghargaan anjay soo karena kamu iku kayak suatu berlian yaa diantara orang orang yang tidak mengetahui nilai mu, dan yaa gilak seh kalau masalah cantik mah kamu the best wes ",
+        "ini beneran malu bgt, ngapain aku wee first date otong otong kamera caper bgt yaallah wkwkw, ini seneng bgt seh aku anjay first time first date sama cewe cantik ini yo lek bisa di gambarkan ndek bioskop rasane meletup jiwa ku terus boom tenang wes pokok ngunu lah, iki aku mulihne nembak gae bahasa inggris pisan akward bgt jirrr",
+        "Momen ini aku gak ekspek seh tiba tiba dum dam duar dan aku ngelakuin hal segila itu , tapi yaa memang aku paling gatega lek loiat kamu nangis broo sumpah deh, lek kamu sedih koyok e sampek sekarang aku bakal gak enak hati, dari sini seh aku mikir hidupku gaisok seh koyok ngene terus , dari sini aku wes bertekad kamu itu orang hebat yang pantas untuk hidup layak dan aku seng bakal membuktikan e",
+        "ini hal seng  gila juga tapi aku sumpah seneng seh bisa menikamti perjalanan ini bersamamu dan ini kayak akhh akhire kamu bisa lulus loh, yoo masio yaa belum ketebus ijazah e, numpak becak ter the best seh ehehe gak mbayangno kamu lek mabayangno mukaku jijik paling saiki awokawok, iki momen seng bener bener aku maless bgt ate pisah sampek rasane lek isok ayahmu ojok teko sek wes huhu, iku ae aku sampek nginep rumahmu kan soale yaa gimana belll maless bett pisah pas waktu iku",
+        "lah after itu kan kita ldr yaa, buruk e kita skip ae momen baik ini, tapi dari situ aku sadar seh entah kamu juga atau ndak , hubungan itu bukan hanya tentang yang harus selalu berbunga bunga ataupun saling love bomibing yaa, tapi yaaa berjalan aja mengalir semua ini  bisa dinikmati kok , kamu jadi  pribadi yang jauh lebih mnegerti akupun juga selalu mencoba untuk bisa selalu memhami terimaksih banyak seh kita memang bukan pribadi yang cocok, tapi dilihat bagaimanapun kamu tetaplah seorang wanita yang paaaaling layak sebagai seorang pasangan the best for u lah",
+        "klik ini balik ke chat habis itu tak kirim hadiah pre ordernya wkwkwk, hadiah aslinya lek ketemu yaa", // Caption untuk foto ke 7
+      ],
+      
+      nextLink: "https://wa.me/6285732723995" // halaman tujuan
+    }
+  ];
+
+  const galleryGrid = document.getElementById("galleryGrid");
+
+  momentCards.forEach((card, index) => {
+    const el = document.createElement("div");
+    el.classList.add("card");
+    el.dataset.index = index;
+    el.dataset.photoIndex = 0;
+
+    el.innerHTML = `
+      <img src="${card.photos[0]}" class="card-img" />
+      <div class="card-info">
+        <div class="card-title">${card.titles[0]}</div>
+        <div class="card-caption">${card.captions[0]}</div>
+        <div class="btn-container"></div>
+      </div>
+    `;
+
+    el.addEventListener("click", () => {
+      let i = parseInt(el.dataset.index);
+      let current = parseInt(el.dataset.photoIndex);
+
+      // next state
+      let next = (current + 1) % card.photos.length;
+      el.dataset.photoIndex = next;
+
+      // update img + text
+      el.querySelector(".card-img").src = card.photos[next];
+      el.querySelector(".card-title").textContent = card.titles[next];
+      el.querySelector(".card-caption").textContent = card.captions[next];
+
+      // button container
+      const container = el.querySelector(".btn-container");
+      container.innerHTML = ""; // clear dulu
+
+      // 🔥 Jika ini foto ke-7 (index 6)
+      if (next === 6) {
+        const btn = document.createElement("button");
+        btn.className = "next-button";
+        btn.textContent = "Lanjutkan";
+
+        btn.onclick = (e) => {
+          e.stopPropagation(); // biar ga ikut flip foto
+          window.location.href = card.nextLink;
+        };
+
+        container.appendChild(btn);
+      }
+    });
+
+    galleryGrid.appendChild(el);
+  });
+</script>
+
+
+</body>
+</html>
